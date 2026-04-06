@@ -1,4 +1,6 @@
 ![Three stages of set up](images/temper_case_3_stages.jpg)
+![Base parts](images/IMG_7732.jpg)
+![Base assembly](images/IMG_7730.jpg)
 
 # Bill of materials
 1. 12cm 18 gauge metal wire
