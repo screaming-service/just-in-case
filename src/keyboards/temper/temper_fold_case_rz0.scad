@@ -1,7 +1,6 @@
 use <../../lib/rect.scad>;
 use <twist_lock.scad>;
 use <../../lib/holes.scad>;
-use <hex_tent_stub.scad>;
 use <side_switch_cover.scad>;
 
 LEFT = true;
