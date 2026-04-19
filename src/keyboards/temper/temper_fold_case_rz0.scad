@@ -1,5 +1,6 @@
 use <../../lib/rect.scad>;
 use <twist_lock.scad>;
+use <../../common/bolt_slot.scad>;
 use <../../lib/holes.scad>;
 use <side_switch_cover.scad>;
 
@@ -58,6 +59,9 @@ MAG_TOP_BUTTON_XY = [ // before rotation
 MAG_TENT_STUB_BUTTON_XY = [ // before rotation, cherry pick from above
     [113.5, 12], [113.5, 93.5], 
 ];
+MAG_TENT_BASE_XY = [ // before rotation, cherry pick from above
+    [6, 12 + 8], [6, 93.5 - 8], 
+];
 MAG_BUTTON_COVER_W = 10;
 MAG_BUTTON_COVER_D = 20;
 MAG_BUTTON_AREA_CORNER_R = 3;
@@ -76,7 +80,7 @@ POST_XY = [
 ];
 
 MINI_CONTAINER_POZ_RZ_WDH = [
-    [10.75, 82.5, 2.5, 0, 16, 10, 15]
+    [14.5, 87, 2.5, 0, 9, 16, 15]
 //,   [25, 93.5, 2, 0, 24, 8, 15]
 ];
 
@@ -165,7 +169,7 @@ TL_RIDGE_R = 1.08;
 TL_R = 6.3 / 2;
 //TL_DTH = -0.5;
 TL_TENT_XY /* before rotation */ = [ [86, 101.5], [86, 20.5] ];
-TL_DEPTH = 2 * TL_RIDGE_R + 2.2;
+TL_DEPTH = 2 * TL_RIDGE_R + 2.2 + 0.6;
 TL_H0 = 32 + 19;
 
 // Twist lock
@@ -344,7 +348,7 @@ difference() {
                     translate([85, -91.5 + 4.75, 0]) square([20, 5]);
                 }
             }
-        intersection() {
+*        intersection() {
         off_xyz_case_wall() translate([2.5, 88.5, 0])
             linear_extrude(height=SCREW_STUB_H0 + H_ABOVE_PCB_BOTTOM + 1) 
                     translate([57, -36, 0]) rect_contour();
@@ -503,8 +507,16 @@ difference() {
     for(xy = MAG_TENT_STUB_BUTTON_XY) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
-                mirror([LEFT? 1: 0, 0, 0])
-                inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
+                mirror([LEFT? 1: 0, 0, 0]) {
+                    bolt_leg_slot(bolt_top_dz=4);
+                }
+    }
+    for(xy = MAG_TENT_BASE_XY) {
+        rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
+            mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
+                mirror([LEFT? 1: 0, 0, 0]) {
+                    inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
+                }
     }
     // Finger tip curve
     for(xyz = FINGER_TIP_XYZ) {
@@ -521,7 +533,7 @@ difference() {
         xyz0 = HINGE_OFFSETS[0];
         translate([(xyz0.x + HINGE_OFFSETS[1].x) / 2, xyz0.y, xyz0.z]) {
             // Shaft
-            translate([0, -0.4, -0.2]) // To compenate print errors
+            translate([0, -0.4, -0.2]) // To compensate print errors
                 rotate([0, 90, 0]) difference() {
                     cylinder(r=HINGE_R, h=CASE_W + 2, center=true);
                     translate([0, 0, -15]) cylinder(r=HINGE_R + 2, h=30);
@@ -557,7 +569,7 @@ difference() {
 
 
 /* ==================== Leg storage sink block fill ==================== */
-translate([0, 0, 20]) union() {
+*translate([0, 0, 20]) union() {
     difference() {
         union() {
             translate(HEX_STUB_THUMB_SINK_POS) 
@@ -609,7 +621,7 @@ translate([0, 0, 20]) union() {
 }
 
 /* ==================== Micro-controller Cover ==================== */
-difference() {
+*difference() {
     cover_h = KEYCAP_BOTTOM_H - SCREW_STUB_H0 - PCB_TH + /*pin soldering*/4;
     union() {
         place_mcu_cover() {
@@ -665,7 +677,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-translate([0, 0, 30])
+*translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
