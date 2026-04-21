@@ -1,4 +1,4 @@
-LEG_NUT_D = 4;
+LEG_NUT_D = 4.3;
 LEG_NUT_H = 1.5;
 
 module bolt_leg_with_nut_slot(
@@ -6,7 +6,7 @@ module bolt_leg_with_nut_slot(
 ) {
     translate([0, 0, 0]) {
         cylinder(d=nut_d, h=nut_h, $fn=6);
-        cylinder(d=2, h=bolt_h);
+        cylinder(d=2.6, h=bolt_h);
         translate([0, 0, bolt_top_dz]) cylinder(d=bolt_d, h=bolt_h);
     }
 }
@@ -23,7 +23,7 @@ module bolt_leg(
 }
 
 module bolt_leg_storage(
-    shaft_h=44, threads_h=4, sock_h=15, shaft_d=4, threads_d=2, sock_d=6,
+    shaft_h=44, threads_h=4, sock_h=15, shaft_d=4.4, threads_d=2.4, sock_d=6.4,
     hull_dist=0, bidirectional=false, lever_center=0.5, lever_w=6, lever_dr=1.2
 ) {
     if(hull_dist == 0) // bidirectional does not support zero dist hull
