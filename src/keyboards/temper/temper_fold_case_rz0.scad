@@ -194,6 +194,14 @@ HINGE_OFFSETS = [
     [98, 16.2 - 10.7, KEYCAP_BOTTOM_H - HINGE_R - HINGE_R_PADDING + 0.35],
 ];
 
+// Bolted leg storage pose
+BOLTED_LEG_POSES = [
+    // x, y, z, rx, ry, rz, hull_dist, shaft_h, bidirectional
+    [31, 6.5, 4, 0, 0, 0, 10, 49, true],
+    [10, 12.5, 4, 0, 0, 0, 10, 49, false],
+    [60 + 50, 91.5, 5.5, 0, 0, 180, 10, 46, false],
+];
+
 // Hex stub for tenting
 HEX_STUB_XY_H_RZ_RX_DZ = [
     // first two, 30 mm, the longer ones
@@ -431,6 +439,16 @@ module tent_leg_diff(travel_x=12) {
             }
 }
 
+module bolted_tent_leg_diff() {
+    for(c = BOLTED_LEG_POSES) {
+        translate([c.x, c.y, c.z]) rotate([c[3], c[4], c[5]])
+            mirror([1, 0, 0]) rotate([0, -90, 0])
+                bolt_leg_storage(
+                    hull_dist=c[6], shaft_h=c[7], bidirectional=c[8], lever_w=9
+                );
+    }
+}
+
 module place_mcu_cover() {
     translate([CASE_W - 3, CASE_D - 12, SCREW_STUB_H0 + PCB_TH]) children();
 }
@@ -508,7 +526,7 @@ difference() {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
                 mirror([LEFT? 1: 0, 0, 0]) {
-                    bolt_leg_slot(bolt_top_dz=4);
+                    bolt_leg_with_nut_slot(bolt_top_dz=4);
                 }
     }
     for(xy = MAG_TENT_BASE_XY) {
@@ -546,7 +564,9 @@ difference() {
         }
     }
     // Hold tent stubs, when not in use
-    tent_leg_diff(travel_x=3);
+*    tent_leg_diff(travel_x=3);
+    bolted_tent_leg_diff();
+    
     // Make an sink to fill later
 //    rotate([0, 0, CASE_RZ])
         translate(HEX_STUB_THUMB_SINK_POS) hex_sink_block(h=12, r=1);
