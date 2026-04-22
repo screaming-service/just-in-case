@@ -62,6 +62,9 @@ MAG_TENT_STUB_BUTTON_XY = [ // before rotation, cherry pick from above
 MAG_TENT_BASE_XY = [ // before rotation, cherry pick from above
     [6, 12 + 8], [6, 93.5 - 8], 
 ];
+MAG_TENT_BASE_XY_COVER = [ // before rotation, cherry pick from above
+    [6, 12 + 8], [6, 93.5 - 8 - 1], 
+];
 MAG_BUTTON_COVER_W = 10;
 MAG_BUTTON_COVER_D = 20;
 MAG_BUTTON_AREA_CORNER_R = 3;
@@ -522,7 +525,7 @@ difference() {
         translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - MAG_BUTTON_TH])
             cylinder(h=MAG_BUTTON_TH + 0.01, r=MAG_BUTTON_R);
 
-    // Twist lock on bottom to form tent
+    // Threaded legs on bottom to form taller side of tent
     for(xy = MAG_TENT_STUB_BUTTON_XY) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
@@ -530,6 +533,7 @@ difference() {
                     bolt_leg_with_nut_slot(bolt_top_dz=4);
                 }
     }
+    // Twist lock on bottom to form shorter side of tent
     for(xy = MAG_TENT_BASE_XY) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
@@ -747,10 +751,15 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
         translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - SCREW_STUB_H0 - H_ABOVE_PCB_BOTTOM - 1.35])
             cylinder(h=MAG_BUTTON_TH + 0.01 + 0.4/*make room for base*/, r=MAG_BUTTON_R);
     // Twist lock on bottom to form tent
-    for(xy = MAG_TENT_STUB_BUTTON_XY) {
+    for(xy = MAG_TENT_BASE_XY_COVER) {
         rotate([0, 0, CASE_RZ]) /*?*/off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH])
             rotate([0, 0, 2 * CASE_RZ + 90]) mirror([LEFT? 0 : 1, 0, 0])
                 inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
+    }
+    // Threaded legs on bottom to form taller side of tent
+    for(xy = MAG_TENT_STUB_BUTTON_XY) {
+        rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH])
+                    bolt_leg_with_nut_slot(bolt_top_dz=4);
     }
 
     // Rubber feet on 4 corners
