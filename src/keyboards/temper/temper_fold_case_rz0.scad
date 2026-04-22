@@ -196,10 +196,10 @@ HINGE_OFFSETS = [
 
 // Bolted leg storage pose
 BOLTED_LEG_POSES = [
-    // x, y, z, rx, ry, rz, hull_dist, shaft_h, bidirectional
-    [31, 6.5, 4, 0, 0, 0, 10, 49, true],
-    [10, 12.5, 4, 0, 0, 0, 10, 49, false],
-    [60 + 50, 91.5, 5.5, 0, 0, 180, 10, 46, false],
+    // x, y, z, rx, ry, rz, hull_dist, shaft_h, bidirectional, bump shaft shift, index, hull_shift
+    [29, 10.5, 4, 0, 0, -3, 10, 49, true, 10, 1, -3],
+//    [10, 12.5, 4, 0, 0, 0, 10, 49, false, 10, 0, 0],
+    [60 + 50, 91.5, 5.5, 0, 0, 180, 10, 46, false, 15, 0, 0],
 ];
 
 // Hex stub for tenting
@@ -444,7 +444,8 @@ module bolted_tent_leg_diff() {
         translate([c.x, c.y, c.z]) rotate([c[3], c[4], c[5]])
             mirror([1, 0, 0]) rotate([0, -90, 0])
                 bolt_leg_storage(
-                    hull_dist=c[6], shaft_h=c[7], bidirectional=c[8], lever_w=9
+                    hull_dist=c[6], shaft_h=c[7], bidirectional=c[8], lever_w=9,
+                    bump_shaft_shift=c[9], bump_index=c[10], bump_hull_shift=c[11]
                 );
     }
 }
