@@ -702,7 +702,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-*translate([0, 0, 30])
+translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
@@ -733,8 +733,8 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     }
     // Cut corners
     rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([9, -10.7, 0]) {
-        translate([-10, 13, -5])
-            rotate([-45, 0, 0]) cube([CASE_W + 2, 6, 2]);
+        translate([-10, 13 - sqrt(0.5), -5 - sqrt(0.5)])
+            rotate([-45, 0, 0]) cube([CASE_W + 2, 8, 2 + 1]);
         translate([-10, 13, -6])
             rotate([45, 0, 0]) cube([CASE_W + 2, 6, 2]);
     }
