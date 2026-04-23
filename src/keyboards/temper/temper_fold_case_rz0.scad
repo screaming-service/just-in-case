@@ -201,7 +201,8 @@ HINGE_OFFSETS = [
 BOLTED_LEG_POSES = [
     // x, y, z, rx, ry, rz, hull_dist, shaft_h, bidirectional, bump shaft shift, index, hull_shift
     [29, 10.5, 4, 0, 0, -3, 10, 49, true, 10, 1, -3],
-//    [10, 12.5, 4, 0, 0, 0, 10, 49, false, 10, 0, 0],
+//    [7, 9.5, 9, 0, 0, 36, 10, 49, false, 10, 0, 0],
+    [51, 37, 9.5, 0, 0, 33 + 180, 10, 49, false, 10, 0, 0],
     [60 + 50, 91.5, 5.5, 0, 0, 180, 10, 46, false, 15, 0, 0],
 ];
 
@@ -230,8 +231,9 @@ HEX_STUB_XY_H_RZ_RX_DZ = [
 HEX_STUB_R = (3 + 1) * 2 / sqrt(3); // See defaults in hex_tent_stub.scad
 HEX_STUB_THUMB_SINK_POS = [21.5, 16, PCB_TH + SCREW_STUB_H0];
 HEX_STUB_THUMB_SINK_POLYGON = [
-    [0, 3], [0, 20], [17.5, 20], /*[17.5, 25], [36, 25], */[36, 20], [55.5, 20],
-    [50.65, 1.25], [47, 0], [25, 2], [10, 3]
+    [0, 3], [0, 21], [17.5, 21], /*[17.5, 25], [36, 25], */[17.5, 27],
+    [37, 27], [37, 19],
+    [31, 14.75], [31, 1.25], [47, 0], [25, 2], [10, 3]
     //[51, -1], [63, -4], [62, -11.75], [0, -2]
 ];
 HEX_STUB_THUMB_SINK_BOLT_POS = [[28, 23, PLATE_TH], [50.4, 33.25, PLATE_TH + 1]];
@@ -594,7 +596,7 @@ difference() {
 
 
 /* ==================== Leg storage sink block fill ==================== */
-*translate([0, 0, 20]) union() {
+translate([0, 0, 20]) union() {
     difference() {
         union() {
             translate(HEX_STUB_THUMB_SINK_POS) 
@@ -603,7 +605,7 @@ difference() {
                 union() {
                     offset(r=0.36) import("../assets/temper-topplate-brd.svg");
                     translate([39, 41.75, 0]) square([22, 12]);
-                    translate([71.5, 33.5, 0]) square([16, 16]);
+*                    translate([71.5, 33.5, 0]) square([16, 16]);
                 }
         }
         // Cut lower corner near thumb
@@ -625,7 +627,7 @@ difference() {
               , /* c3 */ [36, 18], [36, 35], [36, 52]
               , /* c4 */ [54, 11.5], [54, 28.5], [54, 45.5]
               , /* c5 */ [72, 9], [72, 26], [72, 43]
-              , /* thumb */ [68.7, 7, -15], [32, -84, 60]
+              , /* thumb */ [68.7, 7, -15], [32, -84, 60], [48, -8.6]
               , /* extra */ [88, 9], [88, 26], [88, 43], [52, -84, 60]
             ]) rotate([0, 0, xy.z==undef? 0:xy.z]) for(i = [-1, 1]) 
                 translate([xy.x, xy.y + i * 4, 0])
@@ -641,7 +643,8 @@ difference() {
                 rotate([0, 0, pos_rz[3]]) cube([pos_rz[4], pos_rz[5], pos_rz[6]]);
         }
         // Hold tent stubs, when not in use
-        tent_leg_diff(travel_x=3);
+        *tent_leg_diff(travel_x=3);
+        bolted_tent_leg_diff();
     }
 }
 
@@ -702,7 +705,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-translate([0, 0, 30])
+*translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
