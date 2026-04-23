@@ -600,7 +600,7 @@ translate([0, 0, 20]) union() {
     difference() {
         union() {
             translate(HEX_STUB_THUMB_SINK_POS) 
-                hex_sink_block(h=KEYCAP_BOTTOM_H - SCREW_STUB_H0 + 1, r=1, off_r=-0.75);
+                hex_sink_block(h=KEYCAP_BOTTOM_H - SCREW_STUB_H0, r=1, off_r=-0.75);
             translate([-18.5, -17, HEX_STUB_THUMB_SINK_POS.z]) linear_extrude(height=2)
                 union() {
                     offset(r=0.36) import("../assets/temper-topplate-brd.svg");
