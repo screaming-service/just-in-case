@@ -35,9 +35,11 @@ module bolt_leg_storage(
         }
     else union() {
         // main shaft
+        bd_shaft_hull_shift = bidirectional? (sock_d - shaft_d) / 2 : 0;
         difference() {
             hull() for(i = [0, 1]) 
-                translate([i * hull_dist, 0, 0]) cylinder(d=shaft_d, h=shaft_h);
+                translate([i * hull_dist - (1 - i) * bd_shaft_hull_shift, 0, 0])
+                    cylinder(d=shaft_d, h=shaft_h);
             // bumps for shaft
             for(i = [-1, 1]) translate([
                   bump_index * sock_d/*level with sock*/ + bump_hull_shift
