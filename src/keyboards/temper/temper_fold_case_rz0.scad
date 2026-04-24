@@ -83,7 +83,7 @@ POST_XY = [
 ];
 
 MINI_CONTAINER_POZ_RZ_WDH = [
-    [14.5, 87, 2.5, 0, 9, 16, 15]
+    [14.5, 86.23, 2, 0, 9, 16, 15]
 //,   [25, 93.5, 2, 0, 24, 8, 15]
 ];
 
@@ -199,11 +199,15 @@ HINGE_OFFSETS = [
 
 // Bolted leg storage pose
 BOLTED_LEG_POSES = [
-    // x, y, z, rx, ry, rz, hull_dist, shaft_h, bidirectional, bump shaft shift, index, hull_shift
-    [29, 10.5, 4, 0, 0, -3, 10, 49, true, 10, 1, -3],
-//    [7, 9.5, 9, 0, 0, 36, 10, 49, false, 10, 0, 0],
-    [51, 37, 9.5, 0, 0, 33 + 180, 10, 49, false, 10, 0, 0],
-    [60 + 50, 91.5, 5.5, 0, 0, 180, 10, 46, false, 15, 0, 0],
+    // x, y, z, rx, ry, rz, hull_dist, shaft_h, bidirectional, bump shaft shift, index, hull_shift, sock_h, lever_dr
+    [29, 10.5, 4, 0, 0, -3, 10, 49, true, 10, 1, -3, 15, 1.2],
+//    [7, 9.5, 9, 0, 0, 36, 10, 49, false, 10, 0, 0, 15, 1.2],
+    [51, 37 - 0.18, 9.5, 0, 0, 29 + 180, 10, 49, false, 10, 0, 0, 15, 1.2],
+    [60 + 50, 91.5, 4.5, 0, -4.5, 180, 10, 46, false, 15, 0, 0, 15, 1.2],
+    // Extensions
+    [50, 27.8, 8.5, 0, 0, 29 + 180, 10, 15, false, 10, 0, 0, 0, 0],
+    [12, 8.5, 8.5, 0, 0, 29, 10, 15, false, 10, 0, 0, 0, 0],
+    [17.5, 92, 4.2, 0, 0, 0, 10, 16, false, 10, 0, 0, 0, 0],
 ];
 
 // Hex stub for tenting
@@ -450,7 +454,8 @@ module bolted_tent_leg_diff() {
             mirror([1, 0, 0]) rotate([0, -90, 0])
                 bolt_leg_storage(
                     hull_dist=c[6], shaft_h=c[7], bidirectional=c[8], lever_w=9,
-                    bump_shaft_shift=c[9], bump_index=c[10], bump_hull_shift=c[11]
+                    bump_shaft_shift=c[9], bump_index=c[10], bump_hull_shift=c[11], 
+                    sock_h=c[12], lever_dr=c[13]
                 );
     }
 }
@@ -596,7 +601,7 @@ difference() {
 
 
 /* ==================== Leg storage sink block fill ==================== */
-translate([0, 0, 20]) union() {
+*translate([0, 0, 30]) union() {
     difference() {
         union() {
             translate(HEX_STUB_THUMB_SINK_POS) 
@@ -634,10 +639,7 @@ translate([0, 0, 20]) union() {
                     cube([15.2, 4, 1 + 1], center=true);
         // Cut-out to polish leg holder
         for(pos_rz = [
-              [64.25, 25, 9, 0, 12, 5, 8]
-            , [66.2, 32, 9, 0, 7.8, 5, 8]
-            , [67, 20, 8.5, -5, 8, 2, 8]
-            , [70, 14.5, 11, -8, 3, 22, 6]
+              [36, 19, 8, -8, 2, 2, 6]
         ]) {
             translate([pos_rz[0], pos_rz[1], pos_rz[2]])
                 rotate([0, 0, pos_rz[3]]) cube([pos_rz[4], pos_rz[5], pos_rz[6]]);

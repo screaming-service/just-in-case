@@ -48,7 +48,7 @@ module bolt_leg_storage(
             ]) cylinder(r=bump_r, h=4);
         }
         // lever
-        difference() {
+        if(lever_dr > 0) difference() {
             hull() for(i = [0, 1]) translate([0, 0, shaft_h * lever_center])
                 translate([i * hull_dist, 0, -lever_w / 4]) difference() {
                     cylinder(d=shaft_d + lever_dr * 2, h=lever_w);
