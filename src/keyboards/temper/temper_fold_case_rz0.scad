@@ -56,14 +56,15 @@ MAG_TOP_BUTTON_XY = [ // before rotation
     /*[-5, 21.5], [-5.5, 28.5], [-5, 91.5], */[5, 92], 
     /*[106.75, 20.5], [107.5, 27.5], [107, 91.5], */[114.5, 92], 
 ];
-MAG_TENT_STUB_BUTTON_XY = [ // before rotation, cherry pick from above
+THREADED_LEG_NUT_XY = [ // before rotation, cherry pick from above
     [113.5, 12], [113.5, 93.5], 
 ];
-MAG_TENT_BASE_XY = [ // before rotation, cherry pick from above
-    [6, 12 + 8], [6, 93.5 - 8], 
+// shorter side stubs
+SHORT_STUB_BASE_XY = [ // before rotation, cherry pick from above
+    [5, 12 + 8], [5, 93.5 - 8], 
 ];
-MAG_TENT_BASE_XY_COVER = [ // before rotation, cherry pick from above
-    [6, 12 + 8], [6, 93.5 - 8 - 1], 
+SHORT_STUB_COVER_XY = [ // before rotation, cherry pick from above
+    [5, 12 + 8], [5, 93.5 - 8 - 1], 
 ];
 MAG_BUTTON_COVER_W = 10;
 MAG_BUTTON_COVER_D = 20;
@@ -536,7 +537,7 @@ difference() {
             cylinder(h=MAG_BUTTON_TH + 0.01, r=MAG_BUTTON_R);
 
     // Threaded legs on bottom to form taller side of tent
-    for(xy = MAG_TENT_STUB_BUTTON_XY) {
+    for(xy = THREADED_LEG_NUT_XY) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
                 mirror([LEFT? 1: 0, 0, 0]) {
@@ -544,7 +545,7 @@ difference() {
                 }
     }
     // Twist lock on bottom to form shorter side of tent
-    for(xy = MAG_TENT_BASE_XY) {
+    for(xy = SHORT_STUB_BASE_XY) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
                 mirror([LEFT? 1: 0, 0, 0]) {
@@ -723,7 +724,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-*translate([0, 0, 30])
+translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
@@ -772,13 +773,13 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
         translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - SCREW_STUB_H0 - H_ABOVE_PCB_BOTTOM - 1.35])
             cylinder(h=MAG_BUTTON_TH + 0.01 + 0.4/*make room for base*/, r=MAG_BUTTON_R);
     // Twist lock on bottom to form tent
-    for(xy = MAG_TENT_BASE_XY_COVER) {
+    for(xy = SHORT_STUB_COVER_XY) {
         rotate([0, 0, CASE_RZ]) /*?*/off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH])
             rotate([0, 0, 2 * CASE_RZ + 90]) mirror([LEFT? 0 : 1, 0, 0])
                 inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
     }
     // Threaded legs on bottom to form taller side of tent
-    for(xy = MAG_TENT_STUB_BUTTON_XY) {
+    for(xy = THREADED_LEG_NUT_XY) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH])
                     bolt_leg_with_nut_slot(bolt_top_dz=4);
     }
