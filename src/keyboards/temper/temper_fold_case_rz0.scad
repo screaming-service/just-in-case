@@ -83,7 +83,7 @@ POST_XY = [
 ];
 
 MINI_CONTAINER_POZ_RZ_WDH = [
-    [14.5, 86.23, 2, 0, 9, 16, 15]
+    [15, 86.23, 2, 0, 8, 16, 15]
 //,   [25, 93.5, 2, 0, 24, 8, 15]
 ];
 
@@ -99,8 +99,7 @@ WALL_CUTOUT = concat([
     [98, 83.5, SCREW_STUB_H0 + 3 + 1.7, 13, 14, 7 + 0.4],
     // Battery wire clearance
     [99, 84, PLATE_TH, 8.75, 2, 4.4],
-    [109, 84, RUBBER_CAVE_TH + 1, 2, 2, 3],
-    [107.7, 84, RUBBER_CAVE_TH + 1, 1.3, 2, 1.2], // tunnel under
+    [107, 84, RUBBER_CAVE_TH + 1, 4, 2, 3.25], // tunnel under
     // Clean up leg slot near hinge
     /*
     [34, 15, RUBBER_CAVE_TH + 3.5, 18, 6, 8],
@@ -464,6 +463,10 @@ module place_mcu_cover() {
     translate([CASE_W - 3, CASE_D - 12, SCREW_STUB_H0 + PCB_TH]) children();
 }
 
+module place_mcu_bumps() {
+    translate([12.6, 32.9, HEX_STUB_THUMB_SINK_POS.z]) children();
+}
+
 module mcu_cover_base() {
     polygon([[0, 0], [-21, 0], [-21, -45], [0, -57]]);
 }
@@ -581,8 +584,14 @@ difference() {
     
     // Make an sink to fill later
 //    rotate([0, 0, CASE_RZ])
-        translate(HEX_STUB_THUMB_SINK_POS) hex_sink_block(h=12, r=1);
+    translate(HEX_STUB_THUMB_SINK_POS) hex_sink_block(h=12, r=1);
 
+    // Cave in for bumps (latch) on MCU cover
+    place_mcu_bumps()
+        for(xy = [[96, 26], [96, 43]])
+            rotate([0, 0, xy.z==undef? 0:xy.z]) for(i = [-1, 1]) 
+            translate([xy.x, xy.y + i * 4, 0])
+                cube([15.2 + 0.4, 4 + 0.4, .65 + 1 + 0.4], center=true);
     // Cut corners
     rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([9, -10.7, 0 + 0.3]) {
         translate([-10, 11.5, 6.2])
@@ -662,11 +671,10 @@ difference() {
         intersection() {
             place_mcu_cover()
                 linear_extrude(height=cover_h) offset(r=0.65) mcu_cover_base();
-            place_mcu_cover() translate([-0.65, 0, 0])
-                linear_extrude(height=cover_h) offset(r=0.65) mcu_cover_base();
-            translate([12.6, 32.9, HEX_STUB_THUMB_SINK_POS.z])
+            place_mcu_bumps()
                 for(xy = [
                    /* extra */ /*[88, 9],*/ [88, 26], [88, 43], [52, -84, 60]
+                   , [96, 26], [96, 43]
                 ]) rotate([0, 0, xy.z==undef? 0:xy.z]) for(i = [-1, 1]) 
                     translate([xy.x, xy.y + i * 4, 0])
                         cube([15.2, 4, .65 + 1], center=true);
@@ -679,7 +687,7 @@ difference() {
             offset(r=-1) mcu_cover_base();
     // Clearance for powner switch cover
     place_mcu_cover() translate([-1.5, -50.5, -1])
-        cube([2, 17, 4]);
+        cube([3, 17, 4]);
     // Clearance for USB-C port
     place_mcu_cover() translate([-15.5, -1.25, -1])
         cube([11, 5, cover_h + 2]);
@@ -691,7 +699,7 @@ difference() {
         cylinder(h=1.2, r=2.2);
     // Remove thin wall due to bolt clearance
     place_mcu_cover() translate([-1.5, -54.5, -1])
-        cube([2, 4.5, 4]);
+        cube([3, 4.5, 4]);
     // A MCU pattern to make it less boring
     place_mcu_cover() translate([-10.5, -16, cover_h]) union() {
         difference() {
