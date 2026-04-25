@@ -25,7 +25,7 @@ module bolt_leg(
 module bolt_leg_storage(
     shaft_h=44, threads_h=4, sock_h=15, shaft_d=4.4, threads_d=2.4, sock_d=6.4,
     hull_dist=0, bidirectional=false, lever_center=0.5, lever_w=6, lever_dr=1.2,
-    bump_index=0, bump_r=0.35, bump_shaft_shift=0, bump_hull_shift=0
+    bump_index=0, bump_r=0.25, bump_shaft_shift=0, bump_hull_shift=0
 ) {
     if(hull_dist == 0) // bidirectional does not support zero dist hull
         difference() {

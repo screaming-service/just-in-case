@@ -204,9 +204,9 @@ BOLTED_LEG_POSES = [
     [51, 37 - 0.18, 9.5, 0, 0, 29 + 180, 10, 49, false, 10, 0, 0, 15, 1.2],
     [60 + 50, 91.5, 4.5, 0, -4.5, 180, 10, 46, false, 15, 0, 0, 15, 1.2],
     // Extensions
-    [50, 27.8, 8.5, 0, 0, 29 + 180, 10, 15, false, 10, 0, 0, 0, 0],
-    [12, 8.5, 8.5, 0, 0, 29, 10, 15, false, 10, 0, 0, 0, 0],
-    [17.5, 92, 4.2, 0, 0, 0, 10, 16, false, 10, 0, 0, 0, 0],
+    [50, 27.8, 10, 0, 0, 29 + 180, 10, 17, false, 0, 0, 0, 0, 0],
+    [11.5, 8, 8.5, 0, 0, 29, 10, 17, false, 0, 0, 0, 0, 0],
+    [17.5, 92, 4.2, 0, 0, 0, 10, 16, false, 0, 0, 0, 0, 0],
 ];
 
 // Hex stub for tenting
@@ -581,6 +581,14 @@ difference() {
     // Hold tent stubs, when not in use
 *    tent_leg_diff(travel_x=3);
     bolted_tent_leg_diff();
+    // Cut-out to polish leg holder
+    for(pos_rz = [ 
+        [30, 17.1, 8.5, 29, 5, 2, 6] 
+      , [27.5, 18, 8.5, 29, 5, 2, 6]
+    ]) {
+        translate([pos_rz[0], pos_rz[1], pos_rz[2]])
+            rotate([0, 0, pos_rz[3]]) cube([pos_rz[4], pos_rz[5], pos_rz[6]]);
+    }
     
     // Make an sink to fill later
 //    rotate([0, 0, CASE_RZ])
@@ -610,7 +618,7 @@ difference() {
 
 
 /* ==================== Leg storage sink block fill ==================== */
-*translate([0, 0, 30]) union() {
+*translate([0, 0, 0]) union() {
     difference() {
         union() {
             translate(HEX_STUB_THUMB_SINK_POS) 
@@ -648,7 +656,7 @@ difference() {
                     cube([15.2, 4, 1 + 1], center=true);
         // Cut-out to polish leg holder
         for(pos_rz = [
-              [36, 19, 8, -8, 2, 2, 6]
+        //      [36, 19, 8, -8, 2, 2, 6]
         ]) {
             translate([pos_rz[0], pos_rz[1], pos_rz[2]])
                 rotate([0, 0, pos_rz[3]]) cube([pos_rz[4], pos_rz[5], pos_rz[6]]);
