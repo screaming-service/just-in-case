@@ -42,7 +42,8 @@ PLATE_RIGHT = 115;
 RUBBER_R = 6.6 / 2;
 RUBBER_CAVE_TH = 1.4;
 
-MAG_BUTTON_TH = 1.9;
+MAG_BUTTON_TH = 2;
+MAG_BUTTON_COVER_TH = 0.4;
 MAG_BUTTON_R = 6.1 / 2;
 MAG_CONN_BUTTON_XY = [
     [0, 23], [12, 96], [118.8, 79], [107.75, 6]
@@ -533,7 +534,7 @@ difference() {
         }
     // Mag button on top
 #    for (mag_top_xy = MAG_TOP_BUTTON_XY) rotate([0, 0, CASE_RZ])
-        translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - MAG_BUTTON_TH])
+        translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - MAG_BUTTON_TH - MAG_BUTTON_COVER_TH])
             cylinder(h=MAG_BUTTON_TH + 0.01, r=MAG_BUTTON_R);
 
     // Threaded legs on bottom to form taller side of tent
@@ -770,7 +771,7 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
 
     // Mag button on top
     for (mag_top_xy = MAG_TOP_BUTTON_XY) rotate([0, 0, CASE_RZ]) 
-        translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - SCREW_STUB_H0 - H_ABOVE_PCB_BOTTOM - 1.35])
+        translate([mag_top_xy.x, mag_top_xy.y, KEYCAP_BOTTOM_H - SCREW_STUB_H0 - H_ABOVE_PCB_BOTTOM - 1.35 + MAG_BUTTON_COVER_TH])
             cylinder(h=MAG_BUTTON_TH + 0.01 + 0.4/*make room for base*/, r=MAG_BUTTON_R);
     // Twist lock on bottom to form tent
     for(xy = SHORT_STUB_COVER_XY) {
