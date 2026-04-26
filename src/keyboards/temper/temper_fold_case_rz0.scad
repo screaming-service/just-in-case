@@ -60,6 +60,8 @@ MAG_TOP_BUTTON_XY = [ // before rotation
 THREADED_LEG_NUT_XY = [ // before rotation, cherry pick from above
     [113.5, 12], [113.5, 93.5], 
 ];
+
+SHORT_STUB_STORAGE_XY = [[15, 89.5], [15, 82.5]];
 // shorter side stubs
 SHORT_STUB_BASE_XY = [ // before rotation, cherry pick from above
     [5, 12 + 8], [5, 93.5 - 8], 
@@ -85,7 +87,7 @@ POST_XY = [
 ];
 
 MINI_CONTAINER_POZ_RZ_WDH = [
-    [15, 86.23, 2, 0, 8, 16, 15]
+    [15, 86.23, 4.4, 0, 8, 16, 15]
 //,   [25, 93.5, 2, 0, 24, 8, 15]
 ];
 
@@ -415,6 +417,9 @@ difference() {
             rotate([0, 0, pos_rz_wdh[3]]) linear_extrude(height=pos_rz_wdh[6])
                 rect_r(pos_rz_wdh[4], pos_rz_wdh[5], 2);
     }
+    // Store short stubs
+    for (xy = SHORT_STUB_STORAGE_XY) translate([xy.x, xy.y, 2])
+        cylinder(d=6.2, h=20);
 }
 }
 
