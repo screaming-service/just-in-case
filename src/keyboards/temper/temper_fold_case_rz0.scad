@@ -43,7 +43,7 @@ RUBBER_R = 6.6 / 2;
 RUBBER_CAVE_TH = 1.4;
 
 MAG_BUTTON_TH = 2;
-MAG_BUTTON_COVER_TH = 0.4;
+MAG_BUTTON_COVER_TH = 0.5;
 MAG_BUTTON_R = 6.1 / 2;
 MAG_CONN_BUTTON_XY = [
     [0, 23], [12, 96], [118.8, 79], [107.75, 6]
@@ -68,7 +68,7 @@ SHORT_STUB_COVER_XY = [ // before rotation, cherry pick from above
     [5, 12 + 8], [5, 93.5 - 8 - 1], 
 ];
 MAG_BUTTON_COVER_W = 10;
-MAG_BUTTON_COVER_D = 20;
+MAG_BUTTON_COVER_D = 22;
 MAG_BUTTON_AREA_CORNER_R = 3;
 
 RUBBER_XY = [
@@ -210,6 +210,7 @@ BOLTED_LEG_POSES = [
     [11.5, 8, 8.5, 0, 0, 29, 10, 17, false, 0, 0, 0, 0, 0],
     [17.5, 92, 4.2, 0, 0, 0, 10, 16, false, 0, 1, 0, 0, 0],
 ];
+THREADS_DZ = 0.4;
 
 // Hex stub for tenting
 HEX_STUB_XY_H_RZ_RX_DZ = [
@@ -319,6 +320,7 @@ difference() {
             linear_extrude(height=COVER_TH) {
                     rect_contour();
             }
+            // Carve out clearance for key caps, except corners
             translate([0, 0, COVER_PLATE_TH])
             linear_extrude(height=COVER_TH)
                 offset(r=MAG_BUTTON_AREA_CORNER_R)
@@ -335,15 +337,27 @@ difference() {
                                   MAG_BUTTON_AREA_CORNER_R);
                     }
                 }
+            // Clearnace for stub bulges near corners, just to be safe
+            carve_h = 2;
+            translate([0, 2, COVER_TH - carve_h + 0.01])
+                linear_extrude(height=carve_h)
+                    offset(r=2) offset(r=-10) rect_contour();
         }
     }
         // Rise on the finger tip side
-        rotate([0, 0, CASE_RZ]) translate([51 + 8.2, 106.16 - 6.6 + 0.9, COVER_TH])
-            clearance(
-                w=FINGER_TIP_SIDE_RISE_W + 0.04,
-                h=SCREW_STUB_H0 + H_ABOVE_PCB_BOTTOM - KEYCAP_BOTTOM_H + 0.04,
-                th=4 + 1, cr=THUMB_CLUSTER_CR, top_h_coef=1
-            );
+        rotate([0, 0, CASE_RZ])
+            translate([51 + 8.2, 106.16 - 6.6 + 0.9, COVER_TH]) {
+                clearance(
+                    w=FINGER_TIP_SIDE_RISE_W + 0.04,
+                    h=SCREW_STUB_H0 + H_ABOVE_PCB_BOTTOM - KEYCAP_BOTTOM_H + 0.04 - 1,
+                    th=4 + 1, cr=THUMB_CLUSTER_CR, top_h_coef=1
+                );
+                translate([0, -2, 0]) clearance(
+                    w=FINGER_TIP_SIDE_RISE_W + 0.04,
+                    h=SCREW_STUB_H0 + H_ABOVE_PCB_BOTTOM - KEYCAP_BOTTOM_H + 0.04,
+                    th=1.6, cr=THUMB_CLUSTER_CR, top_h_coef=1
+                );
+        }
 }
 }
 
@@ -539,7 +553,7 @@ difference() {
 
     // Threaded legs on bottom to form taller side of tent
     for(xy = THREADED_LEG_NUT_XY) {
-        rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
+        rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH - THREADS_DZ])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
                 mirror([LEFT? 1: 0, 0, 0]) {
                     bolt_leg_with_nut_slot(bolt_top_dz=4);
@@ -725,7 +739,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-translate([0, 0, 30])
+*translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
@@ -781,7 +795,7 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     }
     // Threaded legs on bottom to form taller side of tent
     for(xy = THREADED_LEG_NUT_XY) {
-        rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH])
+        rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH + THREADS_DZ])
                     bolt_leg_with_nut_slot(bolt_top_dz=4);
     }
 
@@ -795,10 +809,10 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
             -0.01
         ]) cylinder(r=RUBBER_R, h=RUBBER_CAVE_TH + 0.01);
     // Finger tip curve
-    for(xyz = [FINGER_TIP_XYZ[0], FINGER_TIP_XYZ[1]]) {
+*    for(xyz = [FINGER_TIP_XYZ[0], FINGER_TIP_XYZ[1]]) {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate(xyz + [0, 0, -10]) cylinder(r=FINGER_TIP_R, h=50);
     }
-    rotate([0, 0, CASE_RZ]) {
+*    rotate([0, 0, CASE_RZ]) {
         rise_wall_th=2.4 + 0.2;
         translate([FINGER_TIP_XYZ[1].x, FINGER_TIP_XYZ[1].y, -COVER_PLATE_TH + 0.69])
             mirror([0, 0, 1]) cylinder(
