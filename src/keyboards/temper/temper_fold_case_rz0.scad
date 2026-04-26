@@ -43,7 +43,7 @@ RUBBER_R = 6.6 / 2;
 RUBBER_CAVE_TH = 1.4;
 
 MAG_BUTTON_TH = 2;
-MAG_BUTTON_COVER_TH = 0.5;
+MAG_BUTTON_COVER_TH = 0;
 MAG_BUTTON_R = 6.1 / 2;
 MAG_CONN_BUTTON_XY = [
     [0, 23], [12, 96], [118.8, 79], [107.75, 6]
@@ -187,7 +187,7 @@ CASE_W1 = 98; // From twist cener to little finger edge
 tent_leg_dh = TENT_END_R0 * TENT_LEG_H0 / CASE_W1;
 // Fingertip curve
 FINGER_TIP_XYZ = [ // relative to rect, before rotation
-    [58, -10.75, -1], [58, 114.1, -1]
+    /*[58, -10.75, -1], */[58, 114.1, 5.6]
 ];
 FINGER_TIP_R = 16;
 
@@ -569,7 +569,8 @@ difference() {
         rotate([0, 0, CASE_RZ]) off_xyz_case_wall() translate([xy.x, xy.y, TL_DEPTH])
             mirror([0, 0, 1]) rotate([0, 0, 2 * CASE_RZ + 0 + 90])
                 mirror([LEFT? 1: 0, 0, 0]) {
-                    inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
+                    cylinder(r=TL_R, h=10);
+                    *inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
                 }
     }
     // Finger tip curve
@@ -796,7 +797,8 @@ translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     for(xy = SHORT_STUB_COVER_XY) {
         rotate([0, 0, CASE_RZ]) /*?*/off_xyz_case_wall() translate([xy.x, xy.y, -TL_DEPTH])
             rotate([0, 0, 2 * CASE_RZ + 90]) mirror([LEFT? 0 : 1, 0, 0])
-                inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
+                cylinder(r=TL_R, h=10);
+                *inv_slot(ridge_dz=TL_RIDGE_DZ, ridge_r=TL_RIDGE_R, ridge_h=TL_RIDGE_H, r=TL_R, ang=75);
     }
     // Threaded legs on bottom to form taller side of tent
     for(xy = THREADED_LEG_NUT_XY) {
