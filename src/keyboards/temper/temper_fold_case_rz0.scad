@@ -345,9 +345,20 @@ difference() {
                 linear_extrude(height=carve_h)
                     offset(r=2) offset(r=-10) rect_contour();
         }
+        // Curved edge
+        curve_r = 2.6;
+        curve_dh = 14;
+        translate([0, CASE_D + curve_r, COVER_TH - curve_r])
+            translate([curve_dh / 2, 0, 0])
+            rotate([0, 90, 0]) difference() {
+                cylinder(h=CASE_W - curve_dh, r=curve_r);
+                translate([-curve_r * 2, 0, -curve_dh / 2])
+                    cube([curve_r * 4, curve_r * 4, CASE_W]);
+            }
     }
         // Rise on the finger tip side
-        rotate([0, 0, CASE_RZ])
+        // Disable in favor of a curved full hight edge
+*        rotate([0, 0, CASE_RZ])
             translate([51 + 8.2, 106.16 - 6.6 + 0.9, COVER_TH]) {
                 clearance(
                     w=FINGER_TIP_SIDE_RISE_W + 0.04,
@@ -745,7 +756,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-*translate([0, 0, 30])
+!translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
