@@ -344,6 +344,12 @@ difference() {
             translate([0, 2, COVER_TH - carve_h + 0.01])
                 linear_extrude(height=carve_h)
                     offset(r=2) offset(r=-10) rect_contour();
+            // Strip off vetical peek for curved edges
+            curve_r = 2.6; // copied from below
+            curve_dh = 25;
+            translate([-CASE_W / 2, CASE_D / 2 - curve_r * 2, COVER_TH - curve_r])
+                translate([curve_dh / 2, -curve_r, curve_r - 2])
+                    cube([CASE_W - curve_dh, curve_r * 2, curve_r * 2]);
         }
         // Curved edge
         curve_r = 2.6;
