@@ -61,7 +61,7 @@ THREADED_LEG_NUT_XY = [ // before rotation, cherry pick from above
     [113.5, 12], [113.5, 93.5], 
 ];
 
-SHORT_STUB_STORAGE_XY = [[15, 89.5], [15, 82.5]];
+SHORT_STUB_STORAGE_XY = [[15, 90], [15, 82]];
 // shorter side stubs
 SHORT_STUB_BASE_XY = [ // before rotation, cherry pick from above
     [5, 12 + 8], [5, 93.5 - 8], 
@@ -436,7 +436,7 @@ difference() {
     }
     // Store short stubs
     for (xy = SHORT_STUB_STORAGE_XY) translate([xy.x, xy.y, 2])
-        cylinder(d=6.2, h=20);
+        cylinder(d=6.2 + 1, h=20);
 }
 }
 
