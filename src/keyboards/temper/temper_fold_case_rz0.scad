@@ -61,7 +61,7 @@ THREADED_LEG_NUT_XY = [ // before rotation, cherry pick from above
     [113.5, 12], [113.5, 93.5], 
 ];
 
-SHORT_STUB_STORAGE_XY = [[15, 90], [15, 82]];
+SHORT_STUB_STORAGE_XY = [[15, 90], [15, 82], [27, 31.5]];
 // shorter side stubs
 SHORT_STUB_BASE_XY = [ // before rotation, cherry pick from above
     [5, 12 + 8], [5, 93.5 - 8], 
@@ -657,7 +657,7 @@ difference() {
 
 
 /* ==================== Leg storage sink block fill ==================== */
-*translate([0, 0, 0]) union() {
+*translate([0, 10, 0]) union() {
     difference() {
         union() {
             translate(HEX_STUB_THUMB_SINK_POS) 
@@ -703,6 +703,9 @@ difference() {
         // Hold tent stubs, when not in use
         *tent_leg_diff(travel_x=3);
         bolted_tent_leg_diff();
+        // Store short stubs
+        for (xy = SHORT_STUB_STORAGE_XY) translate([xy.x, xy.y, 6])
+            cylinder(d=6.2 + 1, h=20);
     }
 }
 
@@ -762,7 +765,7 @@ difference() {
 echo("Thickness difference of plate and cover:", KEYCAP_BOTTOM_H - COVER_TH); 
 
 /* ==================== Case Cover ==================== */
-!translate([0, 0, 30])
+*translate([0, 0, 30])
 translate([0, 0, KEYCAP_BOTTOM_H + COVER_TH]) difference() {
     difference() {
         mirror([0, 0, 1]) off_xyz_case_wall() cover_base();
